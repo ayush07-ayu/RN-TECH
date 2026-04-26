@@ -1,0 +1,679 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RN-TECH</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    :root {
+      --primary: #00A7E1;
+      --dark: #00171F;
+      --light: #FFFFFF;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    section {
+      padding: 60px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    h1, h2, h3 {
+      margin-bottom: 20px;
+      color: var(--dark);
+    }
+    p {
+      margin-bottom: 15px;
+    }
+    .btn {
+      display: inline-block;
+      background-color: var(--primary);
+      color: var(--light);
+      padding: 12px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 2px solid var(--primary);
+    }
+    .btn:hover {
+      background-color: transparent;
+      color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 167, 225, 0.2);
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+      position: relative;
+      font-size: 2.5rem;
+    }
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background-color: var(--primary);
+      border-radius: 2px;
+    }
+
+    /* Header Styles */
+    header {
+      background-color: var(--dark);
+      color: var(--light);
+      padding: 20px;
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--light);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+    .logo span {
+      color: red;
+    }
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+    .nav-links li {
+      margin-left: 30px;
+    }
+    .nav-links a {
+      color: var(--light);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+    .nav-links a:hover:after {
+      width: 100%;
+    }
+    .hamburger {
+      display: none;
+      cursor: pointer;
+    }
+
+    /* Hero Section */
+    #hero {
+      background: linear-gradient(135deg, var(--dark) 0%, #003459 100%);
+      color: var(--light);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    .upper-logo {
+      /* new logo above the text in hero */
+      margin-bottom: 20px;
+    }
+    .upper-logo img {
+      max-width: 150px;
+      width: auto;
+      height: auto;
+    }
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: var(--light);
+      animation: fadeInDown 1s ease;
+    }
+    .hero-content p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      animation: fadeInUp 1s ease;
+    }
+    .hero-btn {
+      animation: fadeIn 1.5s ease;
+    }
+
+    /* Facilities Section */
+    .facilities-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+    .facility-card {
+      background-color: var(--light);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+      padding: 30px;
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    .facility-card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .facility-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 167, 225, 0.2);
+    }
+    .facility-icon {
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+    .facility-card:hover .facility-icon {
+      transform: scale(1.2);
+    }
+    .facility-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    /* Certificates Section */
+    #certificates {
+      background-color: #f8f9fa;
+    }
+    .certificates-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    .certificate-card {
+      background-color: var(--light);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    .certificate-card:nth-child(even) {
+      transform: translateX(50px);
+    }
+    .certificate-card.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .certificate-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 167, 225, 0.2);
+    }
+    .certificate-img {
+      width: 100%;
+      height: 200px;
+      background-color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--light);
+      font-size: 5rem;
+    }
+    .certificate-content {
+      padding: 20px;
+    }
+
+    /* Contact Section */
+    .contact-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+    }
+    .contact-info {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    .contact-info.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    .contact-icon {
+      width: 50px;
+      height: 50px;
+      background-color: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--light);
+      font-size: 1.2rem;
+      margin-right: 15px;
+      transition: transform 0.3s ease;
+    }
+    .contact-item:hover .contact-icon {
+      transform: rotate(360deg);
+    }
+    .contact-form {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    .contact-form.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 167, 225, 0.2);
+      outline: none;
+    }
+    textarea.form-control {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--dark);
+      color: var(--light);
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .social-links {
+      display: flex;
+      margin: 20px 0;
+    }
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--light);
+      margin: 0 10px;
+      transition: all 0.3s ease;
+    }
+    .social-link:hover {
+      background-color: var(--primary);
+      transform: translateY(-5px);
+
+    }
+
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .header-container {
+        padding: 0 20px;
+      }
+      .nav-links {
+        position: fixed;
+        top: 80px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 80px);
+        background-color: var(--dark);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: left 0.3s ease;
+      }
+      .nav-links.active {
+        left: 0;
+      }
+      .nav-links li {
+        margin: 15px 0;
+      }
+      .hamburger {
+        display: block;
+        color: var(--light);
+        font-size: 1.5rem;
+      }
+      .hero-content h1 {
+        font-size: 2.2rem;
+      }
+      .section-title {
+        font-size: 2rem;
+      }
+      .facility-card, .certificate-card {
+        margin-bottom: 20px;
+      }
+      .upper-logo img {
+        max-width: 120px; /* smaller on mobile */
+      }
+    }
+    .certificate-card {
+  display: block; /* so the whole card is clickable */
+  text-decoration: none;
+  color: inherit; /* so text keeps its color */
+  /* other styles you already have: background, box-shadow, etc */
+}
+#ayush {
+  text-align: center; /* optional: center the heading */
+  /* other styles like font-size, font-family etc. */
+}
+
+
+
+#red-text {
+  color: red;
+}
+
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container container">
+      <a href="#" class="logo"><span>RN-TECH</span></a>
+      <div class="hamburger" id="hamburger">
+        <i class="fas fa-bars"></i>
+      </div>
+      <ul class="nav-links" id="nav-links">
+    <li><a href="#facilities">Facilities</a></li>
+        <li><a href="#certificates">Certificates</a></li>
+        <li><a href="#contact">Contact</a></li>
+            <li><a href="indexc.html">Courses</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+<section id="hero">
+  <div class="container hero-content">
+    <div class="upper-logo">
+      <img src="logoogg.png" alt="Upper Logo">
+    </div>
+    <h1 id="ayush">
+      <span id="red-text">RN-TECH</span> <span >Computer Center</span>
+    </h1>
+    <p>Empowering the digital generation with cutting-edge technology education and resources</p>
+    <a href="#contact" class="btn hero-btn">Get In Touch</a>
+  </div>
+</section>
+
+
+  <!-- Facilities Section -->
+  <section id="facilities">
+    <div class="container">
+      <h2 class="section-title">Our Facilities</h2>
+      <div class="facilities-container">
+        <div class="facility-card">
+          <div class="facility-icon">
+            <i class="fas fa-desktop"></i>
+          </div>
+          <h3>High-End Computers</h3>
+          <p>Latest generation computers with high-speed processors and premium graphics cards for all your computing needs.</p>
+        </div>
+        <div class="facility-card">
+          <div class="facility-icon">
+            <i class="fas fa-wifi"></i>
+          </div>
+          <h3>High-Speed Internet</h3>
+          <p>Fiber-optic internet connection with speeds up to 1Gbps for seamless browsing and downloads.</p>
+        </div>
+        <div class="facility-card">
+          <div class="facility-icon">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <h3>Expert Instructors</h3>
+          <p>Certified professionals with years of experience in various IT domains to guide your learning journey.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Certificates Section -->
+  <section id="certificates">
+  <div class="container">
+    <h2 class="section-title">Our Certificates</h2>
+    <div class="certificates-container">
+      <a href="certificate.jpeg" class="certificate-card">
+        <div class="certificate-img">
+          <i class="fas fa-certificate"></i>
+        </div>
+        <div class="certificate-content">
+          <h3>Government Certificate 1</h3>
+          <p>Official Government certification partner offering training and certification for various Computer technologies.</p>
+        </div>
+      </a>
+      <a href="certified2.jpeg" class="certificate-card">
+        <div class="certificate-img">
+          <i class="fas fa-certificate"></i>
+        </div>
+        <div class="certificate-content">
+          <h3>Government Certificate 2</h3>
+          <p>Authorized Government training certificates providing networking certifications.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+  <!-- Contact Section -->
+<section id="contact">
+  <div class="container">
+    <h2 class="section-title">Contact Us</h2>
+    <div class="contact-container">
+      <div class="contact-info">
+
+        <!-- Location -->
+ <div class="contact-item">
+  <div class="contact-icon">
+    <i class="fas fa-map-marker-alt"></i>
+  </div>
+  <div>
+    <h3>Location</h3>
+    <p>
+      <a href="https://www.google.com/maps?q=221+Indira+Market+opp.+Mahendra+Coaching+Institute,+Ambala+Cantt,+133001,+Haryana" 
+         target="_blank" 
+         style="color:#00A7E1; font-weight:bold; text-decoration:none;">
+        221 Indira Market opp. Mahendra Coaching Institute, Ambala Cantt, 133001, Haryana
+      </a>
+    </p>
+    <!-- Removed the embedded Google Map iframe -->
+  </div>
+</div>
+
+
+        <!-- Phone -->
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-phone"></i>
+          </div>
+          <div>
+            <h3>Phone</h3>
+            <p>
+              <a href="https://wa.me/918950416835" 
+                 target="_blank" 
+                 style="color:#00A7E1; font-weight:bold; text-decoration:none;">
+                +91 89504 16835
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div>
+            <h3>Email</h3>
+            <p>
+              <a href="mailto:rntech4028@gmail.com" 
+                 style="color:#00A7E1; font-weight:bold; text-decoration:none;">
+                rntech4028@gmail.com
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Working Hours -->
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div>
+            <h3>Working Hours</h3>
+            <p>Monday - Saturday: 10AM - 8PM</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+  <!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <p>&copy; RN-TECH Computer Center. All rights reserved.</p>
+    <div class="social-links">
+      <!-- YouTube -->
+      <a href="https://www.youtube.com/@RN-Tech_computer_institute" 
+         target="_blank" 
+         class="social-link" 
+         style="color:#FF0000; font-size:24px; margin-left:10px;">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </div>
+  </div>
+</footer>
+
+
+  <script>
+    // Mobile Navigation
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      hamburger.innerHTML = navLinks.classList.contains('active') ?
+        '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+    });
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+      });
+    });
+
+    // Scroll animations
+    function checkScroll() {
+      const facilityCards = document.querySelectorAll('.facility-card');
+      const certificateCards = document.querySelectorAll('.certificate-card');
+      const contactInfo = document.querySelector('.contact-info');
+      facilityCards.forEach(card => {
+        const cardPosition = card.getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.3;
+        if (cardPosition < screenPosition) {
+          card.classList.add('show');
+        }
+      });
+      certificateCards.forEach(card => {
+        const cardPosition = card.getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.3;
+        if (cardPosition < screenPosition) {
+          card.classList.add('show');
+        }
+      });
+      const contactPosition = contactInfo.getBoundingClientRect().top;
+      if (contactPosition < window.innerHeight / 1.3) {
+        contactInfo.classList.add('show');
+      }
+    }
+    window.addEventListener('scroll', checkScroll);
+    window.addEventListener('load', checkScroll);
+
+    // (if you had a contact form, ensure to get it by id and check not null before using)
+  </script>
+</body>
+</html>
